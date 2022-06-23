@@ -128,3 +128,24 @@ ORDER BY
   2,
   3
 
+/*Population vs Vaccinations*/
+SELECT
+  dea.continent,
+  dea.location,
+  dea.date,
+  dea.population,
+  vac.new_vaccinations,
+  SUM(CAST(vac.new_vaccinations AS int)) OVER (PARTITION BY dea.Location ORDER BY dea.location, dea.Date) AS RollingPeopleVaccinated
+FROM
+  CovidDeaths.CovidDeathsTable dea
+	
+JOIN
+  CovidDeaths.CovidVaccinationsTable vac
+ON
+  dea.location = vac.location
+  AND dea.date = vac.date
+WHERE
+  dea.continent IS NOT NULL
+ORDER BY
+  2,
+  3
